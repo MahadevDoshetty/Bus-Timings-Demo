@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bus Timings Search</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+    select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    button {
+      background: #333;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #444;
+    }
+    .result {
+      max-width: 400px;
+      margin: 20px auto;
+      padding: 15px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .result h3 {
+      margin-top: 0;
+    }
+    .timing {
+      padding: 5px;
+      border-bottom: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <h2>Bus Timings Search</h2>
+  <form id="busForm">
+    <label for="from">From:</label>
+    <select id="from" required>
+      <option value="">Select</option>
+      <option value="Ballary">Ballary</option>
+      <option value="Hospet">Hospet</option>
+      <option value="Lingasur">Lingasur</option>
+      <option value="Bangalore">Bangalore</option>
+      <option value="Hyderabad">Hyderabad</option>
+    </select>
+
+    <label for="to">To:</label>
+    <select id="to" required>
+      <option value="">Select</option>
+      <option value="Ballary">Ballary</option>
+      <option value="Hospet">Hospet</option>
+      <option value="Lingasur">Lingasur</option>
+      <option value="Bangalore">Bangalore</option>
+      <option value="Hyderabad">Hyderabad</option>
+    </select>
+
+    <button type="submit">Search</button>
+  </form>
+
+  <div class="result" id="result" style="display:none;">
+    <h3>Available Timings:</h3>
+    <div id="timings"></div>
+  </div>
+
+  <script>
+    const busData = [
+      { from: "Ballary", to: "Lingasur", times: ["04:00", "06:00", "08:00"] },
+      { from: "Ballary", to: "Hospet", times: ["05:30", "07:30"] },
+      { from: "Bangalore", to: "Ballary", times: ["09:00", "13:20", "18:00"] },
+      { from: "Hospet", to: "Lingasur", times: ["04:15", "06:45", "10:00"] },
+      { from: "Hyderabad", to: "Ballary", times: ["08:00", "12:30", "17:00"] },
+      { from: "Ballary", to: "Hyderabad", times: ["05:00", "11:00", "20:00"] },
+    ];
+
+    document.getElementById("busForm").addEventListener("submit", function(e) {
+      e.preventDefault(); // after clicking on search it wont reload the page
+
+      const from = document.getElementById("from").value;
+      const to = document.getElementById("to").value;
+      const timingsDiv = document.getElementById("timings");
+      const resultDiv = document.getElementById("result");
+
+      timingsDiv.innerHTML = ""; // Clear previous results
+      resultDiv.style.display = "none";
+
+      if (!from || !to) {
+        alert("Please select both From and To.");
+        return;
+      }
+
+      const route = busData.find(bus => bus.from === from && bus.to === to);
+      
+      if (route) {
+        route.times.forEach(time => {
+          const div = document.createElement("div");
+          div.className = "timing";
+          div.textContent = time;
+          timingsDiv.appendChild(div);
+        });
+        resultDiv.style.display = "block";
+      } else {
+        timingsDiv.innerHTML = "<p>No buses found for this route.</p>";
+        resultDiv.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>
